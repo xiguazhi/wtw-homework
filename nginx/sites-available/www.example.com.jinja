@@ -5,22 +5,40 @@
 # http://wiki.nginx.org/QuickStart
 # http://wiki.nginx.org/Configuration
 
-{%- set interface = 'ens192' if salt['grains.get']('env') == 'base' else 'lo' -%}
-{%- set addr = salt['network.interface_ip'](interface) -%}
-#Default Server
-server {
-        return 404;
+#Upstream Server
+upstream nginx-test {
+server localhost:3400;
 }
+
 #Example.com Server Block
 server {
 
-	listen {{ addr }}:3200;
+	listen 3200;
 	server_name www.example.com example.com;
         root /usr/share/nginx/html;
         index index.html;
-       
+#        try_files $uri /index.html;
+        error_log /var/log/nginx/error.log debug;
+        access_log /var/log/nginx/3200.log main;
 	location / {
 		proxy_pass http://nginx-test;
 	}
 
 }
+server {
+        listen 3400;
+        server_name www.example.com example.com;
+        root /usr/share/nginx/html;
+        index index.html;
+        access_log /var/log/nginx/3400.log main;
+        location / {
+                 try_files $uri /index.html;
+        }
+}
+
+server { 
+       listen 3200;
+       server_name _;
+       return 404;
+}
+        
