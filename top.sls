@@ -1,3 +1,3 @@
 base:
-  'terraform-test.bsorenson.local':
+  'terraform*':
      - nginx-pkg

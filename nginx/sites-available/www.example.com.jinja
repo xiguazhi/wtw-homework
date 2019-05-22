@@ -1,0 +1,26 @@
+##
+# You should look at the following URL's in order to grasp a solid understanding
+# of Nginx configuration files in order to fully unleash the power of Nginx.
+# http://wiki.nginx.org/Pitfalls
+# http://wiki.nginx.org/QuickStart
+# http://wiki.nginx.org/Configuration
+
+{%- set interface = 'ens192' if salt['grains.get']('env') == 'base' else 'lo' -%}
+{%- set addr = salt['network.interface_ip'](interface) -%}
+#Default Server
+server {
+        return 404;
+}
+#Example.com Server Block
+server {
+
+	listen {{ addr }}:3200;
+	server_name www.example.com example.com;
+        root /usr/share/nginx/html;
+        index index.html;
+       
+	location / {
+		proxy_pass http://nginx-test;
+	}
+
+}
