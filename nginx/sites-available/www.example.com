@@ -2,7 +2,7 @@
 server {
        listen 3200 default_server;
        server_name _;
-       access_log /var/log/nginx/wrongdomain.log;
+       access_log /var/log/nginx/wrongdomain.log main;
        error_page 404 /custom_404.html;
        location / {
            return 404;
