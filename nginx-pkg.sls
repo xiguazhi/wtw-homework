@@ -19,13 +19,7 @@ nginx:
     - group: root
     - mode: 640
 
-#Cleanup any site files not being monitored by Salt
-cleanup_unknown_files:
-  file.directory:
-    - name: salt://nginx/sites-available/
-    - clean: true
-
-#Add example.com site config with all server blocks
+#Copy example.com server block
 /etc/nginx/sites-available/www.example.com:
   file.managed:
     - source: salt://nginx/sites-available/www.example.com.jinja
@@ -34,15 +28,13 @@ cleanup_unknown_files:
     - group: root
     - mode: 644
 
-#Create symbolic link to example.com site 
+#Create Symbolic Links for www.example.com
 /etc/nginx/sites-enabled/www.example.com:
   file.symlink:
     - target: /etc/nginx/sites-available/www.example.com
-    - require:
-      - file: /etc/nginx/sites-available/www.example.com
 
 #Add nginx html file to appropriate directory and modify using jinja template
-/usr/share/nginx/html/index.html:
+/usr/share/nginx/html/index.html: 
   file.managed:
     - source: salt://nginx/html/index.html.jinja
     - template: jinja
@@ -51,9 +43,10 @@ cleanup_unknown_files:
     - mode: 644
 
 #Add nginx proxy config options
-/etc/nginx/proxy.conf:
+copy_proxy_var_config:
   file.managed:
     - source: salt://nginx/proxy.conf
+    - name: /etc/nginx/proxy.conf
     - user: root
     - group: root
     - mode: 644
