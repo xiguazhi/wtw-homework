@@ -33,14 +33,25 @@ nginx:
   file.symlink:
     - target: /etc/nginx/sites-available/www.example.com
 
-#Add nginx html file to appropriate directory and modify using jinja template
-/usr/share/nginx/html/index.html: 
-  file.managed:
-    - source: salt://nginx/html/index.html.jinja
-    - template: jinja
+#Add web directory and modify using jinja template
+web_directory:
+  file.recurse:
+    - name: /usr/share/nginx/html
+    - source: salt://nginx/html
     - user: root
     - group: root
-    - mode: 644
+    - dir_mode: 755
+    - file_mode: 644
+    - clean: True
+
+#Add nginx html file to appropriate directory and modify using jinja template
+#/usr/share/nginx/html/index.html: 
+#  file.managed:
+#    - source: salt://nginx/html/index.html.jinja
+#    - template: jinja
+#    - user: root
+#    - group: root
+#    - mode: 644
 
 #Add nginx proxy config options
 copy_proxy_var_config:

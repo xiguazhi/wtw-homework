@@ -1,35 +1,39 @@
 {%- set addr = grains['ip_interfaces']['ens192'][0] -%}
 #Default Server block
 server {
-       listen 3200 default;
+       listen 3200 default_server;
        server_name _;
-       return 404;
        access_log /var/log/nginx/wrongdomain.log;
+       error_page 404 /custom_404.html;
+       location / {
+           return 404;
+       }
+       location = /custom_404.html {
+       }
+       
 }
 #Example.com Server Block
 server {
 
-	listen {{ addr }}:3200;
-	server_name www.example.com example.com;
-        root /usr/share/nginx/html;
-        error_log /var/log/nginx/error.log debug;
-        access_log /var/log/nginx/3200.log main;
-	location / {
+       listen 3200;
+       server_name www.example.com example.com;
+       access_log /var/log/nginx/3200.log main;
+              
+       location / {
 		proxy_pass http://nginx-test;
-                proxy_set_header HOST $host;
-                proxy_set_header X-Forwarded-Proto $scheme;
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	}
+       location = /custom_404.html {
+       }
 
 }
 server {
-        listen localhost:3400;
-        server_name www.example.com example.com;
-        root /usr/share/nginx/html;
-        access_log /var/log/nginx/3400.log main;
-        location / {
-                 try_files $uri /index.html;
+       listen localhost:3400;
+       server_name www.example.com example.com;
+       access_log /var/log/nginx/3400.log main;
+       location / { 
+               try_files $uri /index.html;
         }
+       location = /custom_404.html {
+       }
 }
         

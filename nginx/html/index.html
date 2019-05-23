@@ -1,8 +1,7 @@
-{% set host = salt['grains.get']('host') -%}
 <!DOCTYPE html>
 <html>
 <head>
-<title>Welcome from {{ host }}</title>
+<title>Welcome to Example.com</title>
 <style>
     body {
         width: 35em;
@@ -12,14 +11,14 @@
 </style>
 </head>
 <body>
-<h1>Welcome to nginx!</h1>
-<p>Hello! This is a a very Salty Test Nginx Site hosted on:</p>
-<h2>{{ host }} </h2>
+<h1>Welcome to Example.com</h1>
+<p>Hello! This is a a very Salty Test Nginx Site deployed using SALT</p>
+<h2>This is a header ---> The rest of this page is the default nginx page. </h2>
 <p>For online documentation and support please refer to
 <a href="http://nginx.org/">nginx.org</a>.<br/>
 Commercial support is available at
 <a href="http://nginx.com/">nginx.com</a>.</p>
 
-<p><em>Thank you for using nginx.</em></p>
+<p><em>Thanks for visiting!</em></p>
 </body>
 </html>
