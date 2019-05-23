@@ -1,4 +1,3 @@
-{%- set addr = grains['ip_interfaces']['ens192'][0] -%}
 #Default Server block
 server {
        listen 3200 default_server;
@@ -26,6 +25,8 @@ server {
        }
 
 }
+
+#Proxy Server Block
 server {
        listen localhost:3400;
        server_name www.example.com example.com;

@@ -22,8 +22,7 @@ nginx:
 #Copy example.com server block
 /etc/nginx/sites-available/www.example.com:
   file.managed:
-    - source: salt://nginx/sites-available/www.example.com.jinja
-    - template: jinja
+    - source: salt://nginx/sites-available/www.example.com
     - user: root
     - group: root
     - mode: 644
@@ -43,15 +42,6 @@ web_directory:
     - dir_mode: 755
     - file_mode: 644
     - clean: True
-
-#Add nginx html file to appropriate directory and modify using jinja template
-#/usr/share/nginx/html/index.html: 
-#  file.managed:
-#    - source: salt://nginx/html/index.html.jinja
-#    - template: jinja
-#    - user: root
-#    - group: root
-#    - mode: 644
 
 #Add nginx proxy config options
 copy_proxy_var_config:
